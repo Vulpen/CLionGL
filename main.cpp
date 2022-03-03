@@ -66,14 +66,16 @@ int main(int argc, char *argv[]) {
     // Vertices defined in normalized device coordinates!
     // Probably should switch to GLFloats.
     float vertices[] = {
-            0.5f,  0.5f, 0.0f,  // top right
-            0.5f, -0.5f, 0.0f,  // bottom right
-            -0.5f, -0.5f, 0.0f,  // bottom left
-            -0.5f,  0.5f, 0.0f   // top left
+            -0.25 + -0.25, -0.25, 0,
+            0 + -0.25, 0.25, 0,
+            0.25 + -0.25, -0.25, 0,
+            -0.25 + 0.25, -0.25, 0,
+            0 + 0.25, 0.25, 0,
+            0.25 + 0.25, -0.25, 0
     };
     unsigned int indices[] = {
-            0, 1, 3,
-            1, 2, 3
+            0, 1, 2,
+            3, 4, 5
     };
 
     // VAO 0
@@ -135,7 +137,7 @@ int main(int argc, char *argv[]) {
     glDeleteShader(fragmentShader);
 
 
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glDisable(GL_CULL_FACE);
 
     // Main loop
