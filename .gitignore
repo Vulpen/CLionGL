@@ -31,5 +31,9 @@
 *.out
 *.app
 
+# Visual Studio
+*.vcxproj
+*.vcxproj.filters
+
 # Project exclude paths
 /cmake-build-debug/
