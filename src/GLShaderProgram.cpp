@@ -3,6 +3,13 @@
 #include <iostream>
 #include <fstream>
 
+GLShaderProgram::GLShaderProgram(): mShaderID(0) {}
+
+GLShaderProgram::~GLShaderProgram() {
+    glDeleteProgram(mShaderID);
+    mShaderID = 0;
+}
+
 void GLShaderProgram::use() {
     if (mShaderID > 0) {
         glUseProgram(mShaderID);

@@ -10,6 +10,9 @@ target_include_directories(${PROJECT_NAME}
         headers/
         )
 
+configure_file(resources/shaders/solidcolor.frag resources/shaders/solidcolor.frag)
+configure_file(resources/shaders/solidcolor.vert resources/shaders/solidcolor.vert)
+
 add_subdirectory(external/glfw)
 add_subdirectory(external/glad)
 
