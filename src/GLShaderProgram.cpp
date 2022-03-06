@@ -3,7 +3,7 @@
 #include <iostream>
 #include <fstream>
 
-GLShaderProgram::GLShaderProgram(): mShaderID(0) {}
+GLShaderProgram::GLShaderProgram() : mShaderID(0) {}
 
 GLShaderProgram::~GLShaderProgram() {
     glDeleteProgram(mShaderID);
@@ -50,6 +50,20 @@ bool GLShaderProgram::loadAndCompileShaders(const char *vsFilename, const char *
     return true;
 }
 
+void GLShaderProgram::setUniform(const GLchar *name, const GLfloat value) {
+    GLint location = getUniformLocation(name);
+    glUniform1f(location, value);
+}
+
+GLint GLShaderProgram::getUniformLocation(const GLchar *name) {
+    std::map<string, GLint>::iterator it = mUniformMap.find(name);
+
+    if (it == mUniformMap.end()) {
+        mUniformMap[name] = glGetUniformLocation(mShaderID, name);
+    }
+    return mUniformMap[name];
+}
+
 void GLShaderProgram::checkCompileErrors(GLuint shader, ShaderType type) {
     int status = 0;
 
@@ -85,6 +99,8 @@ string GLShaderProgram::fileToString(const string &filename) {
         file.open(filename, std::ios::in);
         if (!file.fail()) {
             ss << file.rdbuf();
+        } else {
+            throw std::exception();
         }
 
         file.close();

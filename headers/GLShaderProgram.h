@@ -21,10 +21,12 @@ public:
 
     bool loadAndCompileShaders(const char *vertexFilepath, const char *fragmentFilepath);
     void use();
+    void setUniform(const GLchar* name, const GLfloat value);
 
 private:
     string fileToString(const string &filepath);
     void checkCompileErrors(GLuint shader, ShaderType type);
+    GLint getUniformLocation(const GLchar* name);
 
     GLuint mShaderID;
     std::map<string, GLint> mUniformMap;

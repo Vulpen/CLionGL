@@ -101,7 +101,8 @@ int main(int argc, char *argv[]) {
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     // glDisable(GL_CULL_FACE);
 
-    solidColorShader.loadAndCompileShaders("resources/shaders/solidcolor.vert", "resources/shaders/solidcolor.frag");
+    solidColorShader.loadAndCompileShaders("resources/shaders/solidcolor.vert", "resources/shaders/uniformcolor.frag");
+    GLfloat greenValue = 0.0f;
 
     // Main loop
     while (!glfwWindowShouldClose(window)) {
@@ -110,7 +111,13 @@ int main(int argc, char *argv[]) {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        greenValue += 0.001;
+        if(greenValue > 1.0f) {
+            greenValue = 0.0f;
+        }
+
         solidColorShader.use();
+        solidColorShader.setUniform("uColor", greenValue);
         glBindVertexArray(VAO1);
         glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
         glBindVertexArray(VAO2);
