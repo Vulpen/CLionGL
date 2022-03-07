@@ -5,6 +5,7 @@ void GLTexture::loadTexture(const char *textureFilePath) {
     data = stbi_load(textureFilePath, &width, &height, &nrChannels, 0);
     if (!data) {
         std::cerr << "Could not load texture" << std::endl;
+        throw std::exception();
     }
     glGenTextures(1, &glTextureID);
     glBindTexture(GL_TEXTURE_2D, glTextureID);

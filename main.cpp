@@ -1,11 +1,16 @@
 #include "GLShaderProgram.h"
 #include "GLTexture.h"
+#include "GLVertexArray.h"
+#include "GLBuffer.h"
 #include <iostream>
 #include <glad.h>
 #include <glfw3.h>
 
 GLShaderProgram solidColorShader;
 GLTexture brickTexture;
+GLVertexArray vertArray;
+GLBuffer vertBuffer(GL_ARRAY_BUFFER, GL_STATIC_DRAW);
+GLBuffer indexBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_STATIC_DRAW);
 
 void glfw_resize_callback(GLFWwindow *window, int width, int height) {
     glViewport(0, 0, width, height);
@@ -70,6 +75,13 @@ int main(int argc, char *argv[]) {
             0, 1, 2,
     };
 
+    vertArray.Generate();
+    vertBuffer.Generate(vertices, 9);
+    indexBuffer.Generate(indices, 3);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *) 0);
+    glEnableVertexAttribArray(0);
+    glBindVertexArray(0);
+
     // VAO 0
     unsigned int VAO1, VAO2, VBO1, VBO2, EBO;
     glGenVertexArrays(1, &VAO1);
@@ -88,7 +100,6 @@ int main(int argc, char *argv[]) {
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *) 0);
     glEnableVertexAttribArray(0);
-
 
     glBindVertexArray(VAO2);
     glBindBuffer(GL_ARRAY_BUFFER, VBO2);
@@ -122,7 +133,8 @@ int main(int argc, char *argv[]) {
         brickTexture.use();
         solidColorShader.use();
         solidColorShader.setUniform("uColor", greenValue);
-        glBindVertexArray(VAO1);
+        //glBindVertexArray(VAO1);
+        vertArray.use();
         glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
         glBindVertexArray(VAO2);
         glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
