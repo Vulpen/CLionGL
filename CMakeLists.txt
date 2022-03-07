@@ -3,7 +3,7 @@ project(CLionGL)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(${PROJECT_NAME} main.cpp src/GLShaderProgram.cpp)
+add_executable(${PROJECT_NAME} main.cpp src/GLShaderProgram.cpp src/GLTexture.cpp)
 
 target_include_directories(${PROJECT_NAME}
         PRIVATE
@@ -13,12 +13,14 @@ target_include_directories(${PROJECT_NAME}
 configure_file(resources/shaders/solidcolor.frag resources/shaders/solidcolor.frag)
 configure_file(resources/shaders/uniformcolor.frag resources/shaders/uniformcolor.frag)
 configure_file(resources/shaders/solidcolor.vert resources/shaders/solidcolor.vert)
+configure_file(resources/textures/wall.jpg resources/textures/wall.jpg COPYONLY)
 
 add_subdirectory(external/glfw)
 add_subdirectory(external/glad)
 
 target_include_directories(${PROJECT_NAME}
         PUBLIC external/glfw/include/GLFW
+        PUBLIC external/stb_image
         PUBLIC cmake-build-debug/external/glad/include/glad
         )
 

@@ -1,9 +1,11 @@
 #include "GLShaderProgram.h"
+#include "GLTexture.h"
 #include <iostream>
 #include <glad.h>
 #include <glfw3.h>
 
 GLShaderProgram solidColorShader;
+GLTexture brickTexture;
 
 void glfw_resize_callback(GLFWwindow *window, int width, int height) {
     glViewport(0, 0, width, height);
@@ -101,6 +103,7 @@ int main(int argc, char *argv[]) {
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     // glDisable(GL_CULL_FACE);
 
+    brickTexture.loadTexture("resources/textures/wall.jpg");
     solidColorShader.loadAndCompileShaders("resources/shaders/solidcolor.vert", "resources/shaders/uniformcolor.frag");
     GLfloat greenValue = 0.0f;
 
@@ -112,10 +115,11 @@ int main(int argc, char *argv[]) {
         glClear(GL_COLOR_BUFFER_BIT);
 
         greenValue += 0.001;
-        if(greenValue > 1.0f) {
+        if (greenValue > 1.0f) {
             greenValue = 0.0f;
         }
 
+        brickTexture.use();
         solidColorShader.use();
         solidColorShader.setUniform("uColor", greenValue);
         glBindVertexArray(VAO1);
