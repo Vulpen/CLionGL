@@ -2,6 +2,8 @@
 #define SHADER_PROGRAM_H
 
 #include <glad.h>
+#include <glm.hpp>
+#include <ext.hpp>
 #include <string>
 #include <map>
 
@@ -22,6 +24,7 @@ public:
     bool loadAndCompileShaders(const char *vertexFilepath, const char *fragmentFilepath);
     void use();
     void setUniform(const GLchar* name, const GLfloat value);
+    void setUniform(const GLchar* name, const glm::mat4& m);
 
 private:
     string fileToString(const string &filepath);

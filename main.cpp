@@ -5,6 +5,8 @@
 #include <iostream>
 #include <glad.h>
 #include <glfw3.h>
+#include <glm.hpp>
+#include <ext.hpp>
 
 GLShaderProgram solidColorShader;
 GLTexture brickTexture;
@@ -115,8 +117,22 @@ int main(int argc, char *argv[]) {
     // glDisable(GL_CULL_FACE);
 
     brickTexture.loadTexture("resources/textures/wall.jpg");
-    solidColorShader.loadAndCompileShaders("resources/shaders/solidcolor.vert", "resources/shaders/uniformcolor.frag");
+    solidColorShader.loadAndCompileShaders("resources/shaders/3dtransform.vert", "resources/shaders/solidcolor.frag");
     GLfloat greenValue = 0.0f;
+
+    glm::mat4x4 model = glm::mat4(1.0f);
+    glm::mat4x4 view = glm::mat4x4(1.0f);
+    glm::mat4x4 projection = glm::mat4x4(1.0f);
+    model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -1.0f));
+    // TODO: change to use screen height and width
+    projection = glm::perspective(glm::radians(45.0f), 300.0f / 300.0f, 0.1f, 100.0f);
+    solidColorShader.use();
+    solidColorShader.setUniform("model", model);
+    solidColorShader.setUniform("view", view);
+    solidColorShader.setUniform("projection", projection);
+
+    std::cout << glGetError() << std::endl;
 
     // Main loop
     while (!glfwWindowShouldClose(window)) {
