@@ -7,9 +7,12 @@
 class GLBuffer {
 public:
     GLBuffer(GLuint BufferType, GLuint DataSuggestion);
+    ~GLBuffer();
+    void Generate(const GLvoid* bufferStart, int sizeBytes);
     void Generate(const GLfloat* arrStart, int arrayLength);
     void Generate(const GLuint* arrStart, int arrayLength);
-    void use();
+    void bind() const;
+    void unbind() const;
 private:
     GLBuffer();
     GLuint mBufferType;

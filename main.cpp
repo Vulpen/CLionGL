@@ -78,11 +78,13 @@ int main(int argc, char *argv[]) {
     };
 
     vertArray.Generate();
-    vertBuffer.Generate(vertices, 9);
-    indexBuffer.Generate(indices, 3);
+    vertBuffer.Generate((GLvoid*)vertices, 9 * sizeof(GLfloat));
+    indexBuffer.Generate((GLvoid*)indices, 3 * sizeof(GLuint));
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *) 0);
     glEnableVertexAttribArray(0);
     glBindVertexArray(0);
+    vertBuffer.unbind();
+    indexBuffer.unbind();
 
     // VAO 0
     unsigned int VAO1, VAO2, VBO1, VBO2, EBO;
@@ -124,7 +126,7 @@ int main(int argc, char *argv[]) {
     glm::mat4x4 view = glm::mat4x4(1.0f);
     glm::mat4x4 projection = glm::mat4x4(1.0f);
     model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -1.0f));
+    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
     // TODO: change to use screen height and width
     projection = glm::perspective(glm::radians(45.0f), 300.0f / 300.0f, 0.1f, 100.0f);
     solidColorShader.use();

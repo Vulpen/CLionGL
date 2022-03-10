@@ -4,7 +4,15 @@ GLBuffer::GLBuffer(GLuint BufferType, GLuint DataSuggestion) {
     mBufferType = BufferType; mDataSuggestion = DataSuggestion;
 }
 
-void GLBuffer::Generate(const GLfloat *arrStart, int arrayLength) {
+GLBuffer::~GLBuffer() {
+    glDeleteBuffers(1, &mID);
+}
+
+/**
+ * This version of generate takes in a void pointer, which means it can take any type of buffer!
+ * Should take precidence over the other function calls.
+ */
+void GLBuffer::Generate(const GLvoid *bufferStart, int sizeBytes) {
     if(mID != 0) {
         std::cerr << "Attempt to regenerate an existing buffer." << std::endl;
         throw std::exception();
@@ -12,26 +20,23 @@ void GLBuffer::Generate(const GLfloat *arrStart, int arrayLength) {
 
     glGenBuffers(1, &mID);
     glBindBuffer(mBufferType, mID);
-    glBufferData(mBufferType, sizeof(GLfloat) * arrayLength, arrStart, mDataSuggestion);
+    glBufferData(mBufferType, sizeBytes, bufferStart, mDataSuggestion);
 }
 
-void GLBuffer::Generate(const GLuint *arrStart, int arrayLength) {
-    if(mID != 0) {
-        std::cerr << "Attempt to regenerate an existing buffer." << std::endl;
-        throw std::exception();
-    }
-
-    glGenBuffers(1, &mID);
-    glBindBuffer(mBufferType, mID);
-    glBufferData(mBufferType, sizeof(GLuint) * arrayLength, arrStart, mDataSuggestion);
-}
-
-void GLBuffer::use() {
+void GLBuffer::bind() const {
     if(mID == 0) {
         std::cerr << "Attempt to use unallocated buffer." << std::endl;
         throw std::exception();
     }
     glBindBuffer(mBufferType, mID);
+}
+
+void GLBuffer::unbind() const {
+    if(mID == 0) {
+        std::cerr << "Attempt to use unallocated buffer." << std::endl;
+        throw std::exception();
+    }
+    glBindBuffer(mBufferType, 0);
 }
 
 
