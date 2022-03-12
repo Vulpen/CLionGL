@@ -2,6 +2,7 @@
 #include "GLTexture.h"
 #include "GLVertexArray.h"
 #include "GLBuffer.h"
+#include "Player.h"
 #include <iostream>
 #include <glad.h>
 #include <glfw3.h>
@@ -14,6 +15,8 @@ GLVertexArray vertArray;
 GLBuffer vertBuffer(GL_ARRAY_BUFFER, GL_STATIC_DRAW);
 GLBuffer indexBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_STATIC_DRAW);
 
+Player *mainPlayer;
+
 void glfw_resize_callback(GLFWwindow *window, int width, int height) {
     glViewport(0, 0, width, height);
 }
@@ -22,10 +25,31 @@ void processInput(GLFWwindow *window) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
     }
+    int xIn = 0, yIn = 0;
+
+    if(glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+        yIn = 1;
+    } else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+        yIn = -1;
+    }
+
+    if(glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+        xIn = 1;
+    } else if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
+        xIn = -1;
+    }
+
+    if(mainPlayer) {
+        mainPlayer->HandleInput(xIn, yIn);
+    }
 }
 
 /* program entry */
 int main(int argc, char *argv[]) {
+
+    GLShaderProgram::ViewMatrix = glm::mat4(1.0f);
+    GLShaderProgram::ProjectionMatrix = glm::mat4(1.0f);
+
     GLFWwindow *window;
     int width, height;
 
@@ -77,6 +101,8 @@ int main(int argc, char *argv[]) {
             0, 1, 2,
     };
 
+    mainPlayer = new Player();
+
     vertArray.Generate();
     vertBuffer.Generate((GLvoid*)vertices, 9 * sizeof(GLfloat));
     indexBuffer.Generate((GLvoid*)indices, 3 * sizeof(GLuint));
@@ -127,8 +153,10 @@ int main(int argc, char *argv[]) {
     glm::mat4x4 projection = glm::mat4x4(1.0f);
     model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
     view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+    GLShaderProgram::ViewMatrix = glm::translate(glm::mat4x4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
     // TODO: change to use screen height and width
     projection = glm::perspective(glm::radians(45.0f), 300.0f / 300.0f, 0.1f, 100.0f);
+    GLShaderProgram::ProjectionMatrix = glm::perspective(glm::radians(45.0f), 300.0f / 300.0f, 0.1f, 100.0f);
     solidColorShader.use();
     solidColorShader.setUniform("model", model);
     solidColorShader.setUniform("view", view);
@@ -157,6 +185,7 @@ int main(int argc, char *argv[]) {
         glBindVertexArray(VAO2);
         glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 
+        mainPlayer->Draw();
         glfwSwapBuffers(window);
         glfwPollEvents();
     }

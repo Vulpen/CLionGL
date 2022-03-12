@@ -1,8 +1,6 @@
 #include "GLBuffer.h"
 
-GLBuffer::GLBuffer(GLuint BufferType, GLuint DataSuggestion) {
-    mBufferType = BufferType; mDataSuggestion = DataSuggestion;
-}
+GLBuffer::GLBuffer(GLuint BufferType, GLuint DataSuggestion): mID(0), mBufferType(BufferType), mDataSuggestion(DataSuggestion) { }
 
 GLBuffer::~GLBuffer() {
     glDeleteBuffers(1, &mID);

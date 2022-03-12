@@ -25,6 +25,8 @@ public:
     void use();
     void setUniform(const GLchar* name, const GLfloat value);
     void setUniform(const GLchar* name, const glm::mat4& m);
+    static glm::mat4x4 ViewMatrix;
+    static glm::mat4x4 ProjectionMatrix;
 
 private:
     string fileToString(const string &filepath);

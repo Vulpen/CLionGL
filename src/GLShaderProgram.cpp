@@ -3,7 +3,12 @@
 #include <iostream>
 #include <fstream>
 
-GLShaderProgram::GLShaderProgram() : mShaderID(0) {}
+glm::mat4x4 GLShaderProgram::ViewMatrix;
+glm::mat4x4 GLShaderProgram::ProjectionMatrix;
+
+GLShaderProgram::GLShaderProgram() : mShaderID(0) {
+
+}
 
 GLShaderProgram::~GLShaderProgram() {
     glDeleteProgram(mShaderID);
