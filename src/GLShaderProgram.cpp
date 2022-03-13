@@ -121,3 +121,8 @@ string GLShaderProgram::fileToString(const string &filename) {
 
     return ss.str();
 }
+
+glm::vec3 GLShaderProgram::WorldToClip(const glm::vec3 &point) {
+    glm::vec4 temp = (GLShaderProgram::ProjectionMatrix * GLShaderProgram::ViewMatrix) * glm::vec4(point, 1);
+    return glm::vec3(temp.x, temp.y, temp.z) / temp.z;
+}

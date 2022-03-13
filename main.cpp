@@ -19,6 +19,7 @@ Player *mainPlayer;
 
 void glfw_resize_callback(GLFWwindow *window, int width, int height) {
     glViewport(0, 0, width, height);
+    GLShaderProgram::ProjectionMatrix = glm::perspective(glm::radians(45.0f), width / (float)height, 1.0f, 3.0f);
 }
 
 void processInput(GLFWwindow *window) {
@@ -39,7 +40,7 @@ void processInput(GLFWwindow *window) {
         xIn = -1;
     }
 
-    if(mainPlayer) {
+    if(mainPlayer && (yIn != 0 || xIn != 0)) {
         mainPlayer->HandleInput(xIn, yIn);
     }
 }
@@ -141,7 +142,7 @@ int main(int argc, char *argv[]) {
     glEnableVertexAttribArray(0);
     glBindVertexArray(0);
 
-    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     // glDisable(GL_CULL_FACE);
 
     brickTexture.loadTexture("resources/textures/wall.jpg");
@@ -156,7 +157,7 @@ int main(int argc, char *argv[]) {
     GLShaderProgram::ViewMatrix = glm::translate(glm::mat4x4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
     // TODO: change to use screen height and width
     projection = glm::perspective(glm::radians(45.0f), 300.0f / 300.0f, 0.1f, 100.0f);
-    GLShaderProgram::ProjectionMatrix = glm::perspective(glm::radians(45.0f), 300.0f / 300.0f, 0.1f, 100.0f);
+    GLShaderProgram::ProjectionMatrix = glm::perspective(glm::radians(45.0f), 300.0f / 300.0f, 1.0f, 3.0f);
     solidColorShader.use();
     solidColorShader.setUniform("model", model);
     solidColorShader.setUniform("view", view);
@@ -176,14 +177,14 @@ int main(int argc, char *argv[]) {
             greenValue = 0.0f;
         }
 
-        brickTexture.use();
-        solidColorShader.use();
-        solidColorShader.setUniform("uColor", greenValue);
-        //glBindVertexArray(VAO1);
-        vertArray.use();
-        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
-        glBindVertexArray(VAO2);
-        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+//        brickTexture.use();
+//        solidColorShader.use();
+//        solidColorShader.setUniform("uColor", greenValue);
+//        //glBindVertexArray(VAO1);
+//        vertArray.use();
+//        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+//        glBindVertexArray(VAO2);
+//        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 
         mainPlayer->Draw();
         glfwSwapBuffers(window);

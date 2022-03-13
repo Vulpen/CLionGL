@@ -6,6 +6,7 @@
 #include "GLShaderProgram.h"
 #include <glad.h>
 #include <glm.hpp>
+#include <iostream>
 
 /**
  * For asteroids, need to handle the player wrapping around the screen.
@@ -18,11 +19,13 @@ public:
     void HandleInput(int x, int y);
     void Update();
 private:
+    glm::vec2 forwardVector();
     GLVertexArray mVertexArray;
     GLBuffer mVertexBuffer;
     GLBuffer mIndexBuffer;
     GLShaderProgram mShaderProgram;
     float scale;
+    float rotationRads;
     glm::vec2 location;
 };
 
