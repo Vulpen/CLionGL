@@ -3,9 +3,7 @@
 Player::Player() :
         mVertexBuffer(GL_ARRAY_BUFFER, GL_STATIC_DRAW),
         mIndexBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_STATIC_DRAW),
-        scale(0.33),
-        rotationRads(),
-        location(0.0, 0.0) {
+        mTransform() {
 
     GLfloat vertices[] = {
             -0.25, 0.25, 0,
@@ -33,12 +31,7 @@ Player::Player() :
 
 void Player::Draw() {
     mShaderProgram.use();
-    glm::mat4 model = glm::translate(
-            glm::mat4(1.0f),
-            glm::vec3(location.x, location.y, 0)
-            )
-                * glm::scale(glm::mat4(1.0f), glm::vec3(scale))
-                * glm::rotate(glm::mat4(1.0f), rotationRads, glm::vec3(0.0f,0.0f,1.0f));
+    glm::mat4x4 model = mTransform.GenerateModelTransform();
     mShaderProgram.setUniform("model", model);
     mShaderProgram.setUniform("view", GLShaderProgram::ViewMatrix);
     mShaderProgram.setUniform("projection", GLShaderProgram::ProjectionMatrix);
@@ -48,18 +41,13 @@ void Player::Draw() {
 }
 
 void Player::HandleInput(int x, int y) {
-    rotationRads -= x * 0.01f;
-    std::cout << GLShaderProgram::WorldToClip(glm::vec3(location, 0)).x << std::endl;
-    glm::vec2 fwd = forwardVector();
+    mTransform.SetRotation(mTransform.GetRotation() - x * 0.01);
+    glm::vec2 fwd = mTransform.forward();
     if(y == 1) {
-        location += fwd * 0.01f;
+        mTransform.location += fwd * 0.01f;
     }
 }
 
 void Player::Update() {
 
-}
-
-glm::vec2 Player::forwardVector() {
-    return glm::vec2(glm::cos(rotationRads), glm::sin(rotationRads));
 }

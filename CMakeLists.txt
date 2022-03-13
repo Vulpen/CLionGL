@@ -3,7 +3,7 @@ project(CLionGL)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(${PROJECT_NAME} main.cpp src/GLShaderProgram.cpp src/GLTexture.cpp src/GLVertexArray.cpp headers/GLVertexArray.h src/GLBuffer.cpp headers/GLBuffer.h src/Player.cpp headers/Player.h)
+add_executable(${PROJECT_NAME} main.cpp src/GLShaderProgram.cpp src/GLTexture.cpp src/GLVertexArray.cpp headers/GLVertexArray.h src/GLBuffer.cpp headers/GLBuffer.h src/Player.cpp headers/Player.h src/Transform2D.cpp headers/Transform2D.h)
 
 target_include_directories(${PROJECT_NAME}
         PRIVATE

@@ -4,6 +4,8 @@
 #include "GLBuffer.h"
 #include "GLVertexArray.h"
 #include "GLShaderProgram.h"
+#include "Transform2D.h"
+#include <ext.hpp>
 #include <glad.h>
 #include <glm.hpp>
 #include <iostream>
@@ -19,14 +21,11 @@ public:
     void HandleInput(int x, int y);
     void Update();
 private:
-    glm::vec2 forwardVector();
     GLVertexArray mVertexArray;
     GLBuffer mVertexBuffer;
     GLBuffer mIndexBuffer;
     GLShaderProgram mShaderProgram;
-    float scale;
-    float rotationRads;
-    glm::vec2 location;
+    Transform2D mTransform;
 };
 
 
