@@ -3,11 +3,14 @@
 #include <iostream>
 #include <fstream>
 
+float GLShaderProgram::ScreenWidth;
+float GLShaderProgram::ScreenHeight;
 glm::mat4x4 GLShaderProgram::ViewMatrix;
 glm::mat4x4 GLShaderProgram::ProjectionMatrix;
 
 GLShaderProgram::GLShaderProgram() : mShaderID(0) {
-
+    ScreenWidth = INIT_SCREEN_WIDTH;
+    ScreenHeight = INIT_SCREEN_HEIGHT;
 }
 
 GLShaderProgram::~GLShaderProgram() {
