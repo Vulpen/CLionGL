@@ -9,7 +9,8 @@ public:
     Transform2D();
     glm::mat4x4 GenerateModelTransform();
     void SetRotation(float value);
-    float GetRotation();
+    float GetRotation() const;
+    void operator = (const Transform2D& other);
     glm::vec2 forward();
     glm::vec2 location;
     glm::vec2 scale;

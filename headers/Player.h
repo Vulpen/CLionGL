@@ -10,15 +10,18 @@
 #include <glm.hpp>
 #include <iostream>
 
+static const float GHOST_DISPLAY_DISTANCE = 0.97;
+static const float GHOST_REPLACE_DISTANCE = 1.09;
+
 /**
  * For asteroids, need to handle the player wrapping around the screen.
  * Perhaps a screen space offset could be implemented and draw the ship 4 times?
  */
 class Player {
 public:
-    Player();
+    Player(void (*bulletSpawnFunc)());
     void Draw();
-    void HandleInput(int x, int y);
+    void HandleInput(int x, int y, bool fire);
     void Update();
 private:
     GLVertexArray mVertexArray;
@@ -26,6 +29,9 @@ private:
     GLBuffer mIndexBuffer;
     GLShaderProgram mShaderProgram;
     Transform2D mTransform;
+    Transform2D mGhostTransform;
+    void (*spawnBulletCallback)();
+    bool isWithinScreen(glm::vec2 location);
 };
 
 

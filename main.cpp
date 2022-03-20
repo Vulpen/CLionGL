@@ -27,6 +27,7 @@ void processInput(GLFWwindow *window) {
         glfwSetWindowShouldClose(window, true);
     }
     int xIn = 0, yIn = 0;
+    bool fire = false;
 
     if(glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
         yIn = 1;
@@ -40,9 +41,17 @@ void processInput(GLFWwindow *window) {
         xIn = -1;
     }
 
-    if(mainPlayer && (yIn != 0 || xIn != 0)) {
-        mainPlayer->HandleInput(xIn, yIn);
+    if(glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
+        fire = true;
     }
+
+    if(mainPlayer && (yIn != 0 || xIn != 0 || fire)) {
+        mainPlayer->HandleInput(xIn, yIn, fire);
+    }
+}
+
+void spawnBulletCallback() {
+    std::cout << "Bullet Spawned!" << std::endl;
 }
 
 /* program entry */
@@ -84,7 +93,7 @@ int main(int argc, char *argv[]) {
 
     glfwSetFramebufferSizeCallback(window, glfw_resize_callback);
 
-    mainPlayer = new Player();
+    mainPlayer = new Player(spawnBulletCallback);
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     // glDisable(GL_CULL_FACE);

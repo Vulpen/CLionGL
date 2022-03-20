@@ -1,9 +1,12 @@
 #include "Player.h"
 
-Player::Player() :
+Player::Player(void (*bulletSpawnFunc)()) :
         mVertexBuffer(GL_ARRAY_BUFFER, GL_STATIC_DRAW),
         mIndexBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_STATIC_DRAW),
-        mTransform() {
+        mTransform(),
+        mGhostTransform(),
+        spawnBulletCallback(bulletSpawnFunc)
+        {
     mTransform.scale = glm::vec2 (40,40);
 
     GLfloat vertices[] = {
@@ -45,42 +48,46 @@ void Player::Draw() {
             );
 
     // Handle Ghost Ship ---
-    glm::vec2 originalLocation = mTransform.location;
-    glm::vec2 offsetLocation = originalLocation;
+    mGhostTransform = mTransform;
     if(clipLocation.x < -0.9f) {
         // Draw another ship offset by negative screen width
-        offsetLocation.x = originalLocation.x - GLShaderProgram::ScreenWidth;
+        mGhostTransform.location.x = mTransform.location.x - GLShaderProgram::ScreenWidth;
     } else if (clipLocation.x > 0.9f) {
-        offsetLocation.x = originalLocation.x + GLShaderProgram::ScreenWidth;
+        mGhostTransform.location.x = mTransform.location.x + GLShaderProgram::ScreenWidth;
     }
 
     if(clipLocation.y < -0.9f) {
         // Draw another ship offset by negative screen width
-        offsetLocation.y = originalLocation.y - GLShaderProgram::ScreenHeight;
+        mGhostTransform.location.y = mTransform.location.y - GLShaderProgram::ScreenHeight;
     } else if (clipLocation.y > 0.9f) {
-        offsetLocation.y = originalLocation.y + GLShaderProgram::ScreenHeight;
+        mGhostTransform.location.y = mTransform.location.y + GLShaderProgram::ScreenHeight;
     }
 
-    if(offsetLocation != originalLocation) {
+    if(mGhostTransform.location != mTransform.location) {
         mShaderProgram.use();
-        mTransform.location = offsetLocation;
-        glm::mat4x4 model = mTransform.GenerateModelTransform();
+        glm::mat4x4 model = mGhostTransform.GenerateModelTransform();
         mShaderProgram.setUniform("model", model);
         mShaderProgram.setUniform("view", GLShaderProgram::ViewMatrix);
         mShaderProgram.setUniform("projection", GLShaderProgram::ProjectionMatrix);
         mShaderProgram.setUniform("uColor", 0.5f);
         mVertexArray.use();
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        mTransform.location = originalLocation;
     }
-    std::cout << clipLocation.x << std::endl;
 }
 
-void Player::HandleInput(int x, int y) {
+void Player::HandleInput(int x, int y, bool fire) {
     mTransform.SetRotation(mTransform.GetRotation() - x * 0.01);
     glm::vec2 fwd = mTransform.forward();
     if(y != 0) {
         mTransform.location += fwd * (0.6f * y);
+    }
+
+    if(fire) {
+        if(isWithinScreen(mGhostTransform.location)) {
+            spawnBulletCallback();
+        } else if (isWithinScreen(mTransform.location)) {
+            spawnBulletCallback();
+        }
     }
 }
 
@@ -102,4 +109,9 @@ void Player::Update() {
     } else if (clipLocation.y > 1.05f) {
         mTransform.location.y += GLShaderProgram::ScreenHeight;
     }
+}
+
+bool Player::isWithinScreen(glm::vec2 location) {
+    glm::vec2 locationClip = GLShaderProgram::WorldToClip(glm::vec3(location.x, location.y, 0));
+    return locationClip.x < 1.0 && locationClip.y > -1.0 && locationClip.x < 1.0 && locationClip.x > -1.0;
 }

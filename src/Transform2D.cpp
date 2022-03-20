@@ -19,10 +19,16 @@ void Transform2D::SetRotation(float value) {
     mRotationRadians = value;
 }
 
-float Transform2D::GetRotation() {
+float Transform2D::GetRotation() const {
     return mRotationRadians;
 }
 
 glm::vec2 Transform2D::forward() {
     return glm::vec2(glm::cos(mRotationRadians), glm::sin(mRotationRadians));
+}
+
+void Transform2D::operator=(const Transform2D &other) {
+    location = other.location;
+    mRotationRadians = other.GetRotation();
+    scale = other.scale;
 }
