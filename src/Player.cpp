@@ -92,7 +92,7 @@ void Player::HandleInput(int x, int y, bool fire) {
 }
 
 glm::vec2 Player::getBulletSpawnPoint() {
-    return mTransform.location + mTransform.forward();
+    return mTransform.location + (mTransform.forward() * 35.0f);
 }
 
 void Player::Update() {
