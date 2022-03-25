@@ -1,3 +1,4 @@
+#include "Bullet.h"
 #include "GLShaderProgram.h"
 #include "Player.h"
 #include <iostream>
@@ -7,6 +8,7 @@
 #include <ext.hpp>
 
 Player *mainPlayer;
+Bullet *bullet;
 
 void glfw_resize_callback(GLFWwindow *window, int width, int height) {
     glViewport(0, 0, width, height);
@@ -50,8 +52,11 @@ void processInput(GLFWwindow *window) {
     }
 }
 
-void spawnBulletCallback() {
+void spawnBulletCallback(glm::vec2 location, glm::vec2 dir) {
     std::cout << "Bullet Spawned!" << std::endl;
+    if(bullet != NULL) delete(bullet);
+    bullet = new Bullet();
+    bullet->Init(location);
 }
 
 /* program entry */
@@ -110,12 +115,13 @@ int main(int argc, char *argv[]) {
     while (!glfwWindowShouldClose(window)) {
         processInput(window);
         mainPlayer->Update();
-
+        if(bullet != NULL) bullet->Update();
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         mainPlayer->Draw();
+        if(bullet != NULL) bullet->Draw();
         glfwSwapBuffers(window);
         glfwPollEvents();
     }

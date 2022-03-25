@@ -12,8 +12,10 @@ target_include_directories(${PROJECT_NAME}
 
 configure_file(resources/shaders/solidcolor.frag resources/shaders/solidcolor.frag)
 configure_file(resources/shaders/uniformcolor.frag resources/shaders/uniformcolor.frag)
+configure_file(resources/shaders/2dcircle.frag resources/shaders/2dcircle.frag)
 configure_file(resources/shaders/solidcolor.vert resources/shaders/solidcolor.vert)
 configure_file(resources/shaders/3dtransform.vert resources/shaders/3dtransform.vert)
+configure_file(resources/shaders/2dcircle.vert resources/shaders/2dcircle.vert)
 configure_file(resources/textures/wall.jpg resources/textures/wall.jpg COPYONLY)
 
 add_subdirectory(external/glfw)

@@ -28,6 +28,7 @@ public:
     void use();
     void setUniform(const GLchar* name, const GLfloat value);
     void setUniform(const GLchar* name, const glm::mat4& m);
+    void setUniform(const GLchar* name, const glm::vec3& vec);
     static float ScreenWidth;
     static float ScreenHeight;
     static glm::mat4x4 ViewMatrix;

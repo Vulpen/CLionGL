@@ -7,6 +7,7 @@
 class Bullet {
 public:
     Bullet();
+    void Init(glm::vec2 location);
     void Update();
     void Draw();
 

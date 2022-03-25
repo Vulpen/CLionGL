@@ -68,6 +68,11 @@ void GLShaderProgram::setUniform(const GLchar *name, const glm::mat4 &m) {
     glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(m));
 }
 
+void GLShaderProgram::setUniform(const GLchar *name, const glm::vec3 &vec) {
+    GLint location = getUniformLocation(name);
+    glUniform3f(location, vec.x, vec.y, vec.z);
+}
+
 GLint GLShaderProgram::getUniformLocation(const GLchar *name) {
     std::map<string, GLint>::iterator it = mUniformMap.find(name);
 
