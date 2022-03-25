@@ -19,7 +19,7 @@ static const float GHOST_REPLACE_DISTANCE = 1.09;
  */
 class Player {
 public:
-    Player(void (*bulletSpawnFunc)(glm::vec2, glm::vec2));
+    Player(void (*bulletSpawnFunc)(glm::vec2, float ));
     void Draw();
     void HandleInput(int x, int y, bool fire);
     void Update();
@@ -31,7 +31,7 @@ private:
     Transform2D mTransform;
     Transform2D mGhostTransform;
     glm::vec2 getBulletSpawnPoint();
-    void (*spawnBulletCallback)(glm::vec2, glm::vec2);
+    void (*spawnBulletCallback)(glm::vec2, float);
     bool isWithinScreen(glm::vec2 location);
 };
 

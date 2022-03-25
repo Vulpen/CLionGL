@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(void (*bulletSpawnFunc)(glm::vec2, glm::vec2)) :
+Player::Player(void (*bulletSpawnFunc)(glm::vec2, float)) :
         mVertexBuffer(GL_ARRAY_BUFFER, GL_STATIC_DRAW),
         mIndexBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_STATIC_DRAW),
         mTransform(),
@@ -84,9 +84,9 @@ void Player::HandleInput(int x, int y, bool fire) {
 
     if(fire) {
         if(isWithinScreen(mGhostTransform.location)) {
-            spawnBulletCallback(getBulletSpawnPoint(), mTransform.forward());
+            spawnBulletCallback(getBulletSpawnPoint(), mTransform.GetRotation());
         } else if (isWithinScreen(mTransform.location)) {
-            spawnBulletCallback(getBulletSpawnPoint(), mTransform.forward());
+            spawnBulletCallback(getBulletSpawnPoint(), mTransform.GetRotation());
         }
     }
 }

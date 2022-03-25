@@ -9,6 +9,7 @@
 
 Player *mainPlayer;
 Bullet *bullet;
+GLdouble lastTime = 0;
 
 void glfw_resize_callback(GLFWwindow *window, int width, int height) {
     glViewport(0, 0, width, height);
@@ -52,11 +53,11 @@ void processInput(GLFWwindow *window) {
     }
 }
 
-void spawnBulletCallback(glm::vec2 location, glm::vec2 dir) {
+void spawnBulletCallback(glm::vec2 location, float rot) {
     std::cout << "Bullet Spawned!" << std::endl;
     if(bullet != NULL) delete(bullet);
     bullet = new Bullet();
-    bullet->Init(location);
+    bullet->Init(location, rot);
 }
 
 /* program entry */
@@ -111,8 +112,11 @@ int main(int argc, char *argv[]) {
             0.1f, 100.0f);
     std::cout << glGetError() << std::endl;
 
+    GLdouble deltaTime;
     // Main loop
     while (!glfwWindowShouldClose(window)) {
+        deltaTime = glfwGetTime() - lastTime;
+        std::cout << deltaTime << std::endl;
         processInput(window);
         mainPlayer->Update();
         if(bullet != NULL) bullet->Update();
@@ -124,6 +128,7 @@ int main(int argc, char *argv[]) {
         if(bullet != NULL) bullet->Draw();
         glfwSwapBuffers(window);
         glfwPollEvents();
+        lastTime = glfwGetTime();
     }
 
     // Terminate GLFW

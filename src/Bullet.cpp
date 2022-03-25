@@ -12,12 +12,14 @@ mTransform()
     mShader.loadAndCompileShaders("resources/shaders/2dcircle.vert", "resources/shaders/2dcircle.frag");
 }
 
-void Bullet::Init(glm::vec2 location) {
+void Bullet::Init(glm::vec2 location, float rotationRads) {
     mTransform.location = location;
+    mTransform.SetRotation(rotationRads);
 }
 
 void Bullet::Update() {
     mShader.setUniform("aPos", glm::vec3(mTransform.location, 0.0f));
+    mTransform.location += mTransform.forward();
 }
 
 void Bullet::Draw() {
